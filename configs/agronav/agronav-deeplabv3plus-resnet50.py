@@ -1,8 +1,8 @@
 _base_ = [
-    'mmseg/models/deeplabv3plus_r50-d8.py',
-    'mmseg/datasets/agronav.py',
-    'mmseg/schedules/default.py',
-    'mmseg/configs/_base_/default_runtime.py'
+    '../_base_/models/deeplabv3plus_r50-d8.py',
+    '../_base_/datasets/agronav.py',
+    '../_base_/schedules/default.py',
+    '../_base_/default_runtime.py'
 ]
 
 # Adjust number of classes
@@ -14,7 +14,7 @@ model = dict(
 )
 
 # Dataset root
-data_root = 'data/agronav'
+data_root = '/content/TSCF-MMSeg-agronav/data/agronav'
 
 # Paths are set in the dataset config but can be overridden here
 train_dataloader = dict(

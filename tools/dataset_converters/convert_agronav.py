@@ -35,8 +35,8 @@ def split_dataset(image_dir, label_dir, output_dir, val_ratio=0.2, seed=42):
     print(f"Done. Train: {len(train_names)} images, Val: {len(val_names)} images.")
 
 if __name__ == "__main__":
-    image_dir = 'data/agronav/images'
-    label_dir = 'data/agronav/labels'
-    output_dir = 'data/agronav'
+    image_dir = '/content/TSCF-MMSeg-agronav/data/images'
+    label_dir = '/content/TSCF-MMSeg-agronav/data/labels'
+    output_dir = '/content/TSCF-MMSeg-agronav/data/agronav'
 
     split_dataset(image_dir, label_dir, output_dir)
