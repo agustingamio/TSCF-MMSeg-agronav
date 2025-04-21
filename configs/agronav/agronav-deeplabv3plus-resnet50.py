@@ -1,7 +1,7 @@
 _base_ = [
     '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/agronav.py',
-    '../_base_/schedules/default.py',
+    '../_base_/datasets/agronav_dataset.py',
+    '../_base_/schedules/schedule_20k.py',
     '../_base_/default_runtime.py'
 ]
 
