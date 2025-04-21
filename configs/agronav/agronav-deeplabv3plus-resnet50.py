@@ -8,10 +8,20 @@ _base_ = [
 # Number of classes
 num_classes = 9
 
+# Use Group Normalization
+norm_cfg = dict(type='GN', num_groups=32, requires_grad=True)
+
 model = dict(
     data_preprocessor=dict(size=(512, 512)),
-    decode_head=dict(num_classes=num_classes),
-    auxiliary_head=dict(num_classes=num_classes)
+    backbone=dict(norm_cfg=norm_cfg),  # override backbone normalization
+    decode_head=dict(
+        num_classes=num_classes,
+        norm_cfg=norm_cfg
+    ),
+    auxiliary_head=dict(
+        num_classes=num_classes,
+        norm_cfg=norm_cfg
+    )
 )
 
 # Dataset root
@@ -24,16 +34,14 @@ train_dataloader = dict(
         type='AgroNavDataset',
         data_root=data_root,
         data_prefix=dict(img_path='images/train', seg_map_path='annotations/train')
-        # pipeline is inherited from _base_
     )
 )
 val_dataloader = dict(
-    batch_size=2,
+    batch_size=1,
     dataset=dict(
         type='AgroNavDataset',
         data_root=data_root,
         data_prefix=dict(img_path='images/val', seg_map_path='annotations/val')
-        # pipeline is inherited from _base_
     )
 )
 
