@@ -5,8 +5,8 @@ _base_ = [
     '../_base_/default_runtime.py'
 ]
 
-# Adjust number of classes
-num_classes = 9  # soil, sidewalk, vegetation, ...
+# Number of classes
+num_classes = 9
 
 model = dict(
     decode_head=dict(num_classes=num_classes),
@@ -16,14 +16,14 @@ model = dict(
 # Dataset root
 data_root = '/content/TSCF-MMSeg-agronav/data/agronav'
 
-# Paths are set in the dataset config but can be overridden here
+# Corrected train and val dataloaders (pipeline removed completely)
 train_dataloader = dict(
     batch_size=4,
     dataset=dict(
         type='AgroNavDataset',
         data_root=data_root,
-        data_prefix=dict(img_path='images/train', seg_map_path='annotations/train'),
-        pipeline=None  # uses default pipeline from base dataset config
+        data_prefix=dict(img_path='images/train', seg_map_path='annotations/train')
+        # pipeline is inherited from _base_
     )
 )
 val_dataloader = dict(
@@ -31,8 +31,8 @@ val_dataloader = dict(
     dataset=dict(
         type='AgroNavDataset',
         data_root=data_root,
-        data_prefix=dict(img_path='images/val', seg_map_path='annotations/val'),
-        pipeline=None
+        data_prefix=dict(img_path='images/val', seg_map_path='annotations/val')
+        # pipeline is inherited from _base_
     )
 )
 
@@ -45,8 +45,10 @@ default_hooks = dict(
     logger=dict(type='LoggerHook', interval=50)
 )
 
-# Training schedule (optional tweaks)
+# Training loop
 train_cfg = dict(type='IterBasedTrainLoop', max_iters=16000, val_interval=1600)
+
+# Optimizer
 optim_wrapper = dict(
     optimizer=dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005)
 )
