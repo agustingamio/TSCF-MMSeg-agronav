@@ -9,7 +9,7 @@ _base_ = [
 num_classes = 9
 
 # Use Group Normalization
-norm_cfg = dict(type='GN', num_groups=32, requires_grad=True)
+norm_cfg = dict(type='GN', num_groups=16, requires_grad=True)
 
 model = dict(
     data_preprocessor=dict(size=(512, 512)),
