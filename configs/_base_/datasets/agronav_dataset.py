@@ -30,8 +30,6 @@ train_dataloader = dict(
         data_root=data_root,
         data_prefix=dict(img_path='images/train', seg_map_path='annotations/train'),
         pipeline=train_pipeline,
-        classes=classes,
-        palette=palette
     )
 )
 
@@ -45,8 +43,6 @@ val_dataloader = dict(
         data_root=data_root,
         data_prefix=dict(img_path='images/val', seg_map_path='annotations/val'),
         pipeline=val_pipeline,
-        classes=classes,
-        palette=palette
     )
 )
 
