@@ -9,6 +9,7 @@ _base_ = [
 num_classes = 9
 
 model = dict(
+    data_preprocessor=dict(size_divisor=None),
     decode_head=dict(num_classes=num_classes),
     auxiliary_head=dict(num_classes=num_classes)
 )
