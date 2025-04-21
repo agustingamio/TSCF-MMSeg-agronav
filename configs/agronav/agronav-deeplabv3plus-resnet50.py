@@ -28,7 +28,7 @@ train_dataloader = dict(
     )
 )
 val_dataloader = dict(
-    batch_size=1,
+    batch_size=2,
     dataset=dict(
         type='AgroNavDataset',
         data_root=data_root,
