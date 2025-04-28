@@ -1,5 +1,5 @@
 _base_ = [
-    '../mobilenet_v3/mobilenet-v3-d8_lraspp_4xb4-320k_cityscapes-512x1024.py',
+    '../_base_/models/lraspp_m-v3-d8.py',
     '../_base_/datasets/agronav_dataset.py',
     '../_base_/schedules/schedule_20k.py',
     '../_base_/default_runtime.py'
@@ -9,7 +9,7 @@ _base_ = [
 num_classes = 9
 
 # Use Group Normalization
-norm_cfg = dict(type='GN', num_groups=16, requires_grad=True)
+norm_cfg = dict(type='GN', num_groups=8, requires_grad=True)
 
 model = dict(
     data_preprocessor=dict(size=(512, 512)),
