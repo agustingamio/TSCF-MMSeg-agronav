@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/mobilenet-v3-d8_lraspp_4xb4-320k_cityscapes-512x1024.py',
+    '../mobilenet_v3/mobilenet-v3-d8_lraspp_4xb4-320k_cityscapes-512x1024.py',
     '../_base_/datasets/agronav_dataset.py',
     '../_base_/schedules/schedule_20k.py',
     '../_base_/default_runtime.py'
