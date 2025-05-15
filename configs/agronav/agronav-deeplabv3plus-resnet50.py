@@ -1,63 +1,40 @@
-_base_ = [
-    '../_base_/models/lraspp_m-v3-d8.py',
-    '../_base_/datasets/agronav_dataset.py',
-    '../_base_/schedules/schedule_20k.py',
-    '../_base_/default_runtime.py'
-]
-
-# Number of classes
-num_classes = 9
-
-# Use Group Normalization
-norm_cfg = dict(type='GN', num_groups=8, requires_grad=True)
-
+_base_ = ['../san/san-vit-l14_coco-stuff164k-640x640.py']
+pretrained = '/content/ckpts2.pth'  # noqa
 model = dict(
-    data_preprocessor=dict(size=(512, 512)),
-    backbone=dict(norm_cfg=norm_cfg),  # override backbone normalization
-    decode_head=dict(
-        num_classes=num_classes,
-        norm_cfg=norm_cfg
+    type='MultimodalEncoderDecoder',
+    pretrained=pretrained,
+    encoder_resolution=0.7,
+    image_encoder=dict(
+        type='VisionTransformer',
+        img_size=(336, 336),
+        patch_size=14,
+        patch_pad=0,
+        embed_dims=1024,
+        num_layers=18,
+        num_heads=16,
+        out_indices=(5, 11, 17),
     ),
-    auxiliary_head=dict(
-        num_classes=num_classes,
-        norm_cfg=norm_cfg
-    )
-)
+    text_encoder=dict(
+        type='CLIPTextEncoder',
+        embed_dims=768,
+        num_layers=12,
+        num_heads=12,
+        output_dims=768,
+    ),
+    decode_head=dict(
+        type='SideAdapterCLIPHead',
+        num_classes=8,
+        san_cfg=dict(clip_channels=1024, cfg_decoder=dict(num_heads=16)),
+        maskgen_cfg=dict(
+            num_layers=6,
+            embed_dims=1024,
+            num_heads=16,
+            out_dims=768,
+        )))
 
-# Dataset root
-data_root = '/content/TSCF-MMSeg-agronav/data/agronav'
+# By default, models are trained on 8 GPUs with 4 images per GPU
+train_dataloader = dict(batch_size=4)
 
-# Corrected train and val dataloaders (pipeline removed completely)
-train_dataloader = dict(
-    batch_size=4,
-    dataset=dict(
-        type='AgroNavDataset',
-        data_root=data_root,
-        data_prefix=dict(img_path='images/train', seg_map_path='annotations/train')
-    )
-)
-val_dataloader = dict(
-    batch_size=1,
-    dataset=dict(
-        type='AgroNavDataset',
-        data_root=data_root,
-        data_prefix=dict(img_path='images/val', seg_map_path='annotations/val')
-    )
-)
-
-# Evaluation and logging
-val_evaluator = dict(type='IoUMetric', metric='mIoU')
-test_evaluator = val_evaluator
-
-# Logging frequency
-default_hooks = dict(
-    logger=dict(type='LoggerHook', interval=50)
-)
-
-# Training loop
-train_cfg = dict(type='IterBasedTrainLoop', max_iters=16000, val_interval=1600)
-
-# Optimizer
-optim_wrapper = dict(
-    optimizer=dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005)
+metainfo = dict(
+    classes=('clouds', 'dirt', 'bush', 'fence', 'grass', 'net', 'sky-other', 'tree')
 )

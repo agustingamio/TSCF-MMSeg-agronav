@@ -506,6 +506,16 @@ def agronav_palette():
         [0, 0, 0]
     ]
 
+def ourDataSet_classes():
+    return [
+        'road', 'vegetation', 'sky', 'obstacle', 'others'
+    ]
+
+def ourDataSet_palette():
+    return [
+        [128, 64, 128], [0, 128, 0], [70, 130, 180], [220, 20, 60], [128, 128, 128]
+    ]
+
 
 
 dataset_aliases = {
@@ -531,7 +541,8 @@ dataset_aliases = {
         'hsidrive', 'HSIDrive', 'HSI-Drive', 'hsidrive20', 'HSIDrive20',
         'HSI-Drive20'
     ],
-    'agronav': ['agronav', 'AgroNavDataset']
+    'agronav': ['agronav', 'AgroNavDataset'],
+    'ourDataSet': ['ourDataSet', 'ourDataSet']
 }
 
 
