@@ -32,7 +32,6 @@ train_dataloader = dict(
             img_path='images/train',
             seg_map_path='annotations/train'),
         pipeline=train_pipeline,
-        classes=classes
     )
 )
 
@@ -48,7 +47,6 @@ val_dataloader = dict(
             img_path='images/val',
             seg_map_path='annotations/val'),
         pipeline=test_pipeline,
-        classes=classes
     )
 )
 
