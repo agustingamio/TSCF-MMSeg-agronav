@@ -1,27 +1,50 @@
-_base_ = ['../san/san-vit-l14_coco-stuff164k-640x640.py']
-
-# Set new number of classes
-num_classes = 5  # your new dataset classes
+_base_ = [
+    '../_base_/models/san_vit-b16.py',
+    '../_base_/datasets/ourDataSet.py',
+    '../_base_/default_runtime.py'
+]
 
 model = dict(
-    decode_head=dict(num_classes=num_classes),
+    backbone=dict(
+        init_cfg=dict(
+            type='Pretrained',
+            checkpoint='https://download.openmmlab.com/mmsegmentation/v0.5/san/clip_vit-large-patch14-336_3rdparty-0b5df9cb.pth',
+            prefix='backbone',
+        )),
+    head=dict(num_classes=5),
 )
 
-find_unused_parameters = True
-
-# Freeze the image and text encoders by setting lr_mult=0.0
-paramwise_cfg = dict(
-    custom_keys={
-        'image_encoder': dict(lr_mult=0.0),
-        'text_encoder': dict(lr_mult=0.0)
-    }
+img_norm_cfg = dict(
+    mean=[125.307, 122.961, 113.8575],
+    std=[51.5865, 50.847, 51.255],
+    to_rgb=False,
+)
+train_pipeline = [
+    dict(type='RandomCrop', size=32, padding=4),
+    dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
+    dict(type='Resize', size=640),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='ImageToTensor', keys=['img']),
+    dict(type='ToTensor', keys=['gt_label']),
+    dict(type='Collect', keys=['img', 'gt_label']),
+]
+test_pipeline = [
+    dict(type='Resize', size=640),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='ImageToTensor', keys=['img']),
+    dict(type='Collect', keys=['img']),
+]
+data = dict(
+    samples_per_gpu=128,
+    train=dict(pipeline=train_pipeline),
+    val=dict(pipeline=test_pipeline),
+    test=dict(pipeline=test_pipeline),
 )
 
-optimizer = dict(
-    type='AdamW',
-    lr=1e-4,
-    betas=(0.9, 0.999),
-    weight_decay=0.01,
-    paramwise_cfg=paramwise_cfg
-)
-
+# lr is set for a batch size of 128
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
+optimizer_config = dict(grad_clip=None)
+# learning policy
+lr_config = dict(policy='step', step=[15])
+runner = dict(type='EpochBasedRunner', max_epochs=200)
+log_config = dict(interval=100)
