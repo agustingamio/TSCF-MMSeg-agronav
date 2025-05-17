@@ -21,6 +21,7 @@ model = dict(
         num_layers=12,
         num_heads=12,
         output_dims=768,
+        vocabulary=['road', 'vegetation', 'sky', 'obstacle', 'others']
     ),
     decode_head=dict(
         type='SideAdapterCLIPHead',
