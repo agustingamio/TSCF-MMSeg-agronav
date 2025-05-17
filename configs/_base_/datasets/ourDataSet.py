@@ -3,6 +3,8 @@
 dataset_type = 'OurDataSet'
 data_root = 'data/ourDataSet'
 
+classes = ['road', 'vegetation', 'sky', 'obstacle', 'others']
+
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
