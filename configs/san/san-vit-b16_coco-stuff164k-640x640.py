@@ -37,7 +37,7 @@ data_preprocessor = dict(
     test_cfg=dict(size_divisor=32))
 model = dict(
     pretrained=pretrained,
-    text_encoder=dict(dataset_name='ourDataSet2'),
+    text_encoder=dict(vocabulary=['road', 'vegetation', 'sky', 'obstacle', 'others']),
     decode_head=dict(num_classes=171))
 
 # training schedule for 60k

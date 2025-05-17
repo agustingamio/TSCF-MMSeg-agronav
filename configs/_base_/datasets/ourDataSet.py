@@ -3,9 +3,6 @@
 dataset_type = 'OurDataSet'
 data_root = 'data/ourDataSet'
 
-classes = ('class1', 'class2')
-palette = [(128, 0, 0), (0, 128, 0)]  # example, optional
-
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
