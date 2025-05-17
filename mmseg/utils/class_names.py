@@ -542,7 +542,7 @@ dataset_aliases = {
         'HSI-Drive20'
     ],
     'agronav': ['agronav', 'AgroNavDataset'],
-    'ourDataSet': ['ourDataSet', 'ourDataSet']
+    'ourDataSet': ['ourDataSet2']
 }
 
 
