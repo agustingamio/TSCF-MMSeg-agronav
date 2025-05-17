@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/san_vit-b16.py', '../_base_/datasets/coco-stuff164k.py',
+    '../_base_/models/san_vit-b16.py', '../_base_/datasets/ourDataSet.py',
     '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
 crop_size = (640, 640)
@@ -37,7 +37,7 @@ data_preprocessor = dict(
     test_cfg=dict(size_divisor=32))
 model = dict(
     pretrained=pretrained,
-    text_encoder=dict(dataset_name='coco-stuff164k'),
+    text_encoder=dict(dataset_name='ourDataSet'),
     decode_head=dict(num_classes=171))
 
 # training schedule for 60k
