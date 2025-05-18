@@ -38,7 +38,7 @@ data_preprocessor = dict(
 model = dict(
     pretrained=pretrained,
     text_encoder=dict(dataset_name='ourDataSet'),
-    decode_head=dict(num_classes=171))
+    decode_head=dict(num_classes=5))
 
 # training schedule for 60k
 train_cfg = dict(

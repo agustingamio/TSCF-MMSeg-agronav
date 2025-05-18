@@ -1,14 +1,6 @@
 _base_ = [
-    '../_base_/models/san_vit-b16.py',
-    '../_base_/default_runtime.py'
+    '../san/san-vit-l14_coco-stuff164k-640x640.py',
 ]
-
-# Set new number of classes
-num_classes = 5  # your new dataset classes
-
-model = dict(
-    decode_head=dict(num_classes=num_classes),
-)
 
 find_unused_parameters = True
 
