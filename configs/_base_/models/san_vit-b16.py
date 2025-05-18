@@ -11,7 +11,7 @@ data_preprocessor = dict(
     size_divisor=640,
     test_cfg=dict(size_divisor=32))
 
-num_classes = 171
+num_classes = 5
 model = dict(
     type='MultimodalEncoderDecoder',
     data_preprocessor=data_preprocessor,

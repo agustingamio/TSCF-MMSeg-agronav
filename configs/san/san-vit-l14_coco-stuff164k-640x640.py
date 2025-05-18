@@ -33,4 +33,4 @@ model = dict(
         )))
 
 # By default, models are trained on 8 GPUs with 4 images per GPU
-train_dataloader = dict(batch_size=4)
+train_dataloader = dict(batch_size=1)
