@@ -1,7 +1,7 @@
-# configs/_base_/datasets/ourDataSet.py
+# configs/_base_/datasets/our_dataset.py
 
 dataset_type = 'OurDataSet'
-data_root = 'data/ourDataSet'
+data_root = 'data/our_dataset'
 
 classes = ['road', 'vegetation', 'sky', 'obstacle', 'others']
 
