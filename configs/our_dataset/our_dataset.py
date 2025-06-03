@@ -19,4 +19,3 @@ optimizer = dict(
     weight_decay=0.01,
     paramwise_cfg=paramwise_cfg
 )
-

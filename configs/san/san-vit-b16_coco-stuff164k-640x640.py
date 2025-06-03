@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/san_vit-b16.py', '../_base_/datasets/ourDataSet.py',
+    '../_base_/models/san_vit-b16.py', '../_base_/datasets/our_dataset.py',
     '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
 crop_size = (640, 640)
