@@ -7,14 +7,19 @@ import os
 # Config and checkpoint
 cwd = os.getcwd()
 
-config_file = cwd + '/configs/our_datset/our_dataset.py'
-checkpoint_file = cwd + '/work_dirs/our_dataset/iter_60000.pth'
+# Path to config file (.py)
+config_file = cwd + '/configs/our_dataset/segformer_our_dataset_from_ADE.py'
+# Path to checkpoint file (.pth)
+checkpoint_file = cwd + '/work_dirs/segformer_our_dataset_from_ADE_20_06/iter_40000.pth'
 
 # Init model
 model = init_model(config_file, checkpoint_file, device='cuda:0')
 
-image_dir = os.path.join(cwd, 'camara_frontal/diciembre')  # Change this to your image directory
-output_dir = os.path.join(cwd, 'camara_frontal/diciembre_resultados')
+# Directory of images to inference.
+image_dir = os.path.join(cwd, 'data/our_dataset/images_rellis/test')
+
+# Directory where results will be saved.
+output_dir = os.path.join(cwd, 'work_dirs/segformer_our_dataset_from_ADE_20_06/visualizar/resultados_40k')
 os.makedirs(output_dir, exist_ok=True)
 
 # Process each image in the directory

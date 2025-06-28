@@ -8,14 +8,19 @@ import os
 # Config and checkpoint
 cwd = os.getcwd()
 
+# Path to config file (.py)
 config_file = cwd + '/configs/our_dataset/our_dataset.py'
+# Path to checkpoint file (.pth)
 checkpoint_file = cwd + '/work_dirs/our_dataset/iter_60000.pth'
 
 # Init model
 model = init_model(config_file, checkpoint_file, device='cuda:0')
 
+# Image path.
 image_filename = '221205_0284.png'
 image_path = os.path.join(cwd, image_filename)  # Change this to your image directory
+
+# Where will be saved.
 output_dir = os.path.join(cwd, '')
 os.makedirs(output_dir, exist_ok=True)
 

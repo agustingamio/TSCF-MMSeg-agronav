@@ -12,4 +12,4 @@ class OurDataSet(BaseSegDataset):
         palette=palette)
 
     def __init__(self, **kwargs):
-        super().__init__(img_suffix='.png', seg_map_suffix='.png', reduce_zero_label=False, **kwargs)
+        super().__init__(img_suffix='.jpg', seg_map_suffix='.png', reduce_zero_label=False, **kwargs)

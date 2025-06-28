@@ -7,27 +7,34 @@ train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(
-        type='RandomChoiceResize',
-        scales=[int(640 * x * 0.1) for x in range(5, 16)],
-        resize_type='ResizeShortestEdge',
-        max_size=2560),
-    dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=1.0),
-    dict(type='PhotoMetricDistortion'),
+        type='RandomResize',
+        scale=(1024, 1024),
+        ratio_range=(0.5, 2.0),
+        keep_ratio=True
+    ),
+    dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
+    dict(
+        type='PhotoMetricDistortion',
+        brightness_delta=32,
+        contrast_range=(0.5, 1.5),
+        saturation_range=(0.5, 1.5),
+        hue_delta=18
+    ),
     dict(type='PackSegInputs')
 ]
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='ResizeShortestEdge', scale=crop_size, max_size=2560),
-    dict(type='LoadAnnotations'),
+    dict(type='Resize', scale=crop_size, keep_ratio=True),
+    dict(type='LoadAnnotations', reduce_zero_label=False),  # Set to True if label 0 is background and should be ignored
     dict(type='PackSegInputs')
 ]
 
 # By default, models are trained on 4 GPUs with 8 images per GPU
 train_dataloader = dict(batch_size=8, dataset=dict(pipeline=train_pipeline))
 val_dataloader = dict(batch_size=1, dataset=dict(pipeline=test_pipeline))
-test_dataloader = val_dataloader
+test_dataloader = dict(batch_size=1, dataset=dict(pipeline=test_pipeline))
 
 pretrained = 'https://download.openmmlab.com/mmsegmentation/v0.5/san/clip_vit-base-patch16-224_3rdparty-d08f8887.pth'  # noqa
 data_preprocessor = dict(
@@ -37,15 +44,15 @@ data_preprocessor = dict(
     test_cfg=dict(size_divisor=32))
 model = dict(
     pretrained=pretrained,
-    text_encoder=dict(dataset_name='ourDataSet'),
+    text_encoder=dict(dataset_name='our_dataset'),
     decode_head=dict(num_classes=5))
 
 # training schedule for 60k
 train_cfg = dict(
     type='IterBasedTrainLoop',
     max_iters=60000,
-    val_interval=500,
-    val_begin=55000)
+    val_interval=10000,
+    val_begin=10000)
 default_hooks = dict(
     checkpoint=dict(
         type='CheckpointHook',

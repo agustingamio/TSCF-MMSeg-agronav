@@ -2,26 +2,43 @@ import os
 import shutil
 import random
 
-def split_dataset(image_dir, label_dir, output_dir, val_ratio=0.2, seed=42):
+def split_dataset(image_dir, label_dir, output_dir, val_ratio=0.15, test_ratio=0.2, seed=42):
     random.seed(seed)
 
-    # Get sorted filenames (excluding extensions)
-    image_files = sorted([f for f in os.listdir(image_dir)])
-    base_names = [os.path.splitext(f)[0] for f in image_files]
+    valid_exts = ('.png', '.jpg', '.jpeg')
+
+    # Create maps: base name → extension
+    image_files = [f for f in os.listdir(image_dir) if f.lower().endswith(valid_exts)]
+    label_files = [f for f in os.listdir(label_dir) if f.lower().endswith(valid_exts)]
+
+    image_map = {os.path.splitext(f)[0]: os.path.splitext(f)[1] for f in image_files}
+    label_map = {os.path.splitext(f)[0]: os.path.splitext(f)[1] for f in label_files}
+
+    # Keep only base names that exist in both image and label directories
+    common_names = sorted(list(set(image_map.keys()) & set(label_map.keys())))
 
     # Shuffle and split
-    random.shuffle(base_names)
-    val_size = int(len(base_names) * val_ratio)
-    val_names = set(base_names[:val_size])
-    train_names = set(base_names[val_size:])
+    random.shuffle(common_names)
+
+    total = len(common_names)
+    test_size = int(total * test_ratio)
+    trainval_names = common_names[test_size:]
+    val_size = int(len(trainval_names) * val_ratio)
+
+    test_names = set(common_names[:test_size])
+    val_names = set(trainval_names[:val_size])
+    train_names = set(trainval_names[val_size:])
 
     def copy_files(names, split):
         for name in names:
-            img_src = os.path.join(image_dir, f'{name}.png')
-            lbl_src = os.path.join(label_dir, f'{name}.png')
+            img_ext = image_map[name]
+            lbl_ext = label_map[name]
 
-            img_dst = os.path.join(output_dir, 'images', split, f'{name}.png')
-            lbl_dst = os.path.join(output_dir, 'annotations', split, f'{name}.png')
+            img_src = os.path.join(image_dir, f'{name}{img_ext}')
+            lbl_src = os.path.join(label_dir, f'{name}{lbl_ext}')
+
+            img_dst = os.path.join(output_dir, 'images', split, f'{name}{img_ext}')
+            lbl_dst = os.path.join(output_dir, 'annotations', split, f'{name}{lbl_ext}')
 
             os.makedirs(os.path.dirname(img_dst), exist_ok=True)
             os.makedirs(os.path.dirname(lbl_dst), exist_ok=True)
@@ -31,13 +48,14 @@ def split_dataset(image_dir, label_dir, output_dir, val_ratio=0.2, seed=42):
 
     copy_files(train_names, 'train')
     copy_files(val_names, 'val')
+    copy_files(test_names, 'test')
 
-    print(f"Done. Train: {len(train_names)} images, Val: {len(val_names)} images.")
+    print(f"Done. Train: {len(train_names)}, Val: {len(val_names)}, Test: {len(test_names)}")
 
 if __name__ == "__main__":
-    image_dir = '/data/images'
+    image_dir = '/data/images_nuestro'
     label_dir = '/data/labels'
-    output_dir = '/data/ourDataset'
+    output_dir = '/data/our_dataset'
     cwd = os.getcwd()
 
     split_dataset(cwd + image_dir, cwd + label_dir, cwd + output_dir)
